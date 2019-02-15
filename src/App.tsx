@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { TestComp, TestCompWithStyle } from './TestComp';
+
+// ok
+class TestCompChild extends TestComp<{ someVal: string }> {}
+
+// Type error: Type 'ComponentType<Pick<TestCompWithStyleProps<{}>, "text" | "onClick"> & StyledComponentProps<"typo">>' is not a constructor function type.  TS2507
+class TestCompWithStyleChild extends TestCompWithStyle<{ someVal: string }> {}
 
 class App extends Component {
   render() {
@@ -20,6 +27,15 @@ class App extends Component {
             Learn React
           </a>
         </header>
+
+        <TestCompChild
+          classes={{ typo: 'toto' }}
+          text="Hello from comp"
+          onClick={val => {
+            val.someVal; // ok
+            val.test; // error type as expected
+          }}
+        />
       </div>
     );
   }
